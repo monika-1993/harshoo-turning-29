@@ -15,7 +15,7 @@
             --gold-dark: #aa8c2c;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-purple: #8b5cf6;
+            --accent-pink: #f472b6;
             --border-color: rgba(212, 175, 55, 0.2);
         }
 
@@ -30,7 +30,7 @@
             background-color: var(--bg-deep);
             color: var(--text-main);
             min-height: 100vh;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
         }
 
         header {
@@ -38,6 +38,21 @@
             padding: 40px 20px 20px;
             background: linear-gradient(180deg, rgba(19,27,46,0.8) 0%, rgba(11,15,25,0) 100%);
             border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(244, 114, 182, 0.1);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            color: var(--accent-pink);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
 
         h1 {
@@ -248,13 +263,6 @@
             object-fit: cover;
         }
 
-        .photo-placeholder-text {
-            color: var(--text-muted);
-            font-style: italic;
-            text-align: center;
-            padding: 0 20px;
-        }
-
         .section-box {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.05);
@@ -278,223 +286,13 @@
             line-height: 1.5;
         }
 
-        /* Admin Simulation Toolbar */
-        #admin-bar {
+        /* Cute Chatbot Floating Widget */
+        #chat-widget-container {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #07090f;
-            border-top: 1px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            z-index: 999;
-            font-size: 0.9rem;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1000;
         }
 
-        #admin-bar button {
-            background: var(--gold-primary);
-            color: var(--bg-deep);
-            border: none;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        #admin-bar button:hover {
-            opacity: 0.9;
-        }
-
-        @media(max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .modal {
-                padding: 20px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>29 Sides of Him</h1>
-        <p class="subtitle">A 29-day countdown celebration leading up to November 21st.</p>
-        <div class="countdown-banner">
-            Next unlock in: <span id="countdown-timer">--h --m --s</span>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="grid" id="days-grid">
-            <!-- Dynamically generated via script -->
-        </div>
-    </div>
-
-    <!-- Modal Template -->
-    <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-        <div class="modal" id="modal-content" onclick="event.stopPropagation()">
-            <button class="close-btn" onclick="closeModal()">×</button>
-            <div id="modal-body"></div>
-        </div>
-    </div>
-
-    <!-- Testing Toolbar to preview all days -->
-    <div id="admin-bar">
-        <span>🛠️ <strong>Preview Mode:</strong></span>
-        <button onclick="toggleOverride()">Toggle Unlock All Days</button>
-        <span id="override-status" style="color: var(--text-muted);">(Currently: Normal Schedule)</span>
-    </div>
-
-    <script>
-        // 29 Days Dataset mapped from tracker
-        const countdownData = [
-            { day: 1, date: "24 Oct 2026", quality: "The Crisis Manager", vibe: "Cool under pressure", joke: "Handles complex district issues effortlessly, but panics if the Wi-Fi drops for 2 minutes." },
-            { day: 2, date: "25 Oct 2026", quality: "The Paperwork Whisperer", vibe: "Master of files and approvals", joke: "Believes every problem in life can be solved with a formal note and a red pen." },
-            { day: 3, date: "26 Oct 2026", quality: "The Professional Diplomat", vibe: "Charismatic and measured", joke: "Can say 'no' in a meeting so politely that you leave thanking him for it." },
-            { day: 4, date: "27 Oct 2026", quality: "The Field Commander", vibe: "Boots on the ground, site inspection", joke: "Loves a good site visit mostly because it is an excuse to check out roadside tea stalls." },
-            { day: 5, date: "28 Oct 2026", quality: "The Unshakeable Calm", vibe: "Completely unfazed by chaos", joke: "They trained him for disaster management, which comes in handy when picking a restaurant." },
-            { day: 6, date: "29 Oct 2026", quality: "The Master of Deadlines", vibe: "Always punctual for official duty", joke: "'I am leaving in 5 minutes' usually operates on a completely different timezone." },
-            { day: 7, date: "30 Oct 2026", quality: "The Ultimate Problem Solver", vibe: "Resourceful and sharp", joke: "If you give him a broken appliance, he will try to fix it with a paperclip and sheer willpower." },
-            { day: 8, date: "31 Oct 2026", quality: "The Midnight Chai Connoisseur", vibe: "Runs on tea at ungodly hours", joke: "Blood type: 50% tea, 50% administrative caffeine." },
-            { day: 9, date: "01 Nov 2026", quality: "The GPS Rebel", vibe: "Confident in his own routes", joke: "Refuses to follow Google Maps because he is convinced he knows a shortcut." },
-            { day: 10, date: "02 Nov 2026", quality: "The Accidental Comedian", vibe: "Funny without trying", joke: "Gives a serious speech about infrastructure and accidentally drops a punchline." },
-            { day: 11, date: "03 Nov 2026", quality: "The Secret Foodie", vibe: "Loves local street food", joke: "Will travel 40 kilometers out of his way for a legendary local snack." },
-            { day: 12, date: "04 Nov 2026", quality: "The Nap Champion", vibe: "Can fall asleep anywhere", joke: "Power naps so hard he could sleep through a marching band in the living room." },
-            { day: 13, date: "05 Nov 2026", quality: "The Over-Packer", vibe: "Prepared for any apocalypse", joke: "Packs a full survival kit for a weekend trip to a hotel with room service." },
-            { day: 14, date: "06 Nov 2026", quality: "The Playlist Curator", vibe: "Eclectic music taste", joke: "Seamlessly transitions from classic retro hits to intense instrumental tracks." },
-            { day: 15, date: "07 Nov 2026", quality: "The Lifelong Student", vibe: "Constantly reading & learning", joke: "Has read enough policy documents to put a horse to sleep, yet Googles animal facts at 2 AM." },
-            { day: 16, date: "08 Nov 2026", quality: "The Detail Detective", vibe: "Notices everything", joke: "Will spot a typo on a billboard from 100 meters away while driving." },
-            { day: 17, date: "09 Nov 2026", quality: "The Resilient Optimist", vibe: "Bounces back instantly", joke: "Treats every minor setback like an administrative hurdle to be cleared by Friday." },
-            { day: 18, date: "10 Nov 2026", quality: "The Strategic Planner", vibe: "Thinks five steps ahead", joke: "Has a backup plan for the backup plan... but forgets where he kept his car keys." },
-            { day: 19, date: "11 Nov 2026", quality: "The Listener First", vibe: "Patient and attentive", joke: "Listens to everyone's problems all day, but goes blank when asked 'What movie to watch?'" },
-            { day: 20, date: "12 Nov 2026", quality: "The Accountability Champion", vibe: "Takes ownership of everything", joke: "Will blame himself if the weather forecast is wrong." },
-            { day: 21, date: "13 Nov 2026", quality: "The Secret Softie", vibe: "Tough exterior, giant heart", joke: "Manages a district with an iron fist, but melts instantly around cute dogs." },
-            { day: 22, date: "14 Nov 2026", quality: "The Loyal Companion", vibe: "Always in your corner", joke: "Will drive across town at midnight just because you mentioned a craving." },
-            { day: 23, date: "15 Nov 2026", quality: "The Nostalgia Buff", vibe: "Loves old memories & photos", joke: "Keeps photos of awkward hairstyles from 2015 just to keep himself humble." },
-            { day: 24, date: "16 Nov 2026", quality: "The Candid Critic", vibe: "Brutally honest in the funniest way", joke: "Will tell you your outfit looks ridiculous, but only because he cares." },
-            { day: 25, date: "17 Nov 2026", quality: "The Comfort Zone Challenger", vibe: "Always up for trying new things", joke: "Agrees to crazy adventure ideas, then regrets it halfway up a mountain." },
-            { day: 26, date: "18 Nov 2026", quality: "The Champion Cheerer", vibe: "Your biggest hype man", joke: "Celebrates your tiny victories like they just won a national award." },
-            { day: 27, date: "19 Nov 2026", quality: "The Master of the One-Liner", vibe: "Quick-witted, dry humor", joke: "Drops a deadpan joke so fast you take 5 seconds to realize you have been roasted." },
-            { day: 28, date: "20 Nov 2026", quality: "The Grounded Achiever", vibe: "Unpretentious despite success", joke: "Has achieved so much, yet gets excited like a kid over a good cup of coffee." },
-            { day: 29, date: "21 Nov 2026", quality: "Level 29 (Grand Finale!)", vibe: "The complete package & birthday hero", joke: "Level 29 unlocked! One year closer to complaining about his lower back." }
-        ];
-
-        let forceUnlockAll = false;
-
-        // Launch Date Setup: October 24, 2026
-        const launchDate = new Date("2026-10-24T00:00:00");
-
-        function isDayUnlocked(dayIndex) {
-            if (forceUnlockAll) return true;
-            const now = new Date();
-            const unlockTime = new Date(launchDate);
-            unlockTime.setDate(unlockTime.getDate() + (dayIndex - 1));
-            return now >= unlockTime;
-        }
-
-        function renderGrid() {
-            const grid = document.getElementById("days-grid");
-            grid.innerHTML = "";
-
-            countdownData.forEach((item) => {
-                const unlocked = isDayUnlocked(item.day);
-                const card = document.createElement("div");
-                card.className = `card ${item.day === 29 ? 'grand-finale' : ''} ${!unlocked ? 'locked' : ''}`;
-                
-                card.innerHTML = `
-                    <div>
-                        <div class="day-number">Day ${item.day} • ${item.date}</div>
-                        <div class="card-title">${item.quality}</div>
-                    </div>
-                    <div class="card-status">
-                        <span>${item.vibe}</span>
-                        <span>${unlocked ? '🔓 Unlocked' : '🔒 Locked'}</span>
-                    </div>
-                `;
-
-                if (unlocked) {
-                    card.onclick = () => openModal(item);
-                }
-
-                grid.appendChild(card);
-            });
-        }
-
-        function openModal(item) {
-            const overlay = document.getElementById("modal-overlay");
-            const body = document.getElementById("modal-body");
-
-            body.innerHTML = `
-                <div class="modal-day">Day ${item.day} • ${item.date}</div>
-                <h2 class="modal-title">${item.quality}</h2>
-                
-                <div class="photo-frame">
-                    <!-- Replace src with your image path e.g. photos/day${item.day}.jpg -->
-                    <div class="photo-placeholder-text">📷 [Photo Vibe: ${item.vibe}]<br><small style="font-size:0.8rem; opacity:0.7;">Drop your photo file in folder as day${item.day}.jpg</small></div>
-                </div>
-
-                <div class="section-box">
-                    <h4>The Quality & Vibe</h4>
-                    <p style="color: #e2e8f0; font-size: 1.05rem;">${item.vibe}</p>
-                </div>
-
-                <div class="section-box" style="border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.03);">
-                    <h4>Daily Punchline</h4>
-                    <p class="joke-text">"${item.joke}"</p>
-                </div>
-            `;
-
-            overlay.classList.add("active");
-        }
-
-        function closeModal(event) {
-            if (!event || event.target.id === "modal-overlay" || event.target.classList.contains("close-btn")) {
-                document.getElementById("modal-overlay").classList.remove("active");
-            }
-        }
-
-        function toggleOverride() {
-            forceUnlockAll = !forceUnlockAll;
-            document.getElementById("override-status").innerText = forceUnlockAll ? "(Currently: All Unlocked For Preview)" : "(Currently: Normal Schedule)";
-            renderGrid();
-        }
-
-        // Countdown clock logic
-        function updateCountdown() {
-            const now = new Date();
-            // Find next upcoming unlock
-            let nextUnlock = new Date(launchDate);
-            for (let i = 0; i < countdownData.length; i++) {
-                const timeCheck = new Date(launchDate);
-                timeCheck.setDate(timeCheck.getDate() + i);
-                if (now < timeCheck) {
-                    nextUnlock = timeCheck;
-                    break;
-                }
-            }
-
-            const diff = nextUnlock - now;
-            if (diff <= 0) {
-                document.getElementById("countdown-timer").innerText = "Today's content is live!";
-                return;
-            }
-
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById("countdown-timer").innerText = `${hours}h ${minutes}m ${seconds}s`;
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-        renderGrid();
-    </script>
-</body>
-</html>
+        #chat-toggle-btn {
+            background: linear-gradient(135deg, #f472b6 0%, #d4af
