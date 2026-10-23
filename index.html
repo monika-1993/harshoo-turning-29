@@ -410,10 +410,10 @@
                 card.innerHTML = `
                     <div>
                         <div class="day-number">Day ${item.day} • ${item.date}</div>
-                        <div class="card-title">${item.quality}</div>
+                        <div class="card-title">${unlocked ? item.quality: 'Coming Soon...' }</div>
                     </div>
                     <div class="card-status">
-                        <span>${item.vibe}</span>
+                        <span>${unlocked ? item.vibe: '....'}</span>
                         <span>${unlocked ? '🔓 Unlocked' : '🔒 Locked'}</span>
                     </div>
                 `;
@@ -440,7 +440,7 @@
                 </div>
 
                 <div class="section-box">
-                    <h4>Aaj ki tareef !</h4>
+                    <h4>His good quality of the day !</h4>
                     <p style="color: #e2e8f0; font-size: 1.05rem;">${item.vibe}</p>
                 </div>
 
