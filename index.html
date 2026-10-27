@@ -434,7 +434,12 @@
         function openModal(item) {
             const overlay = document.getElementById("modal-overlay");
             const body = document.getElementById("modal-body");
-
+const proTipHTML = item.day === 5 ? `
+                <div class="section-box">
+                    <h4>Pro tip</h4>
+                    <p style="color: #e2e8f0; font-size: 1.05rem;">I had promised to make Ladakh happen for you! Hence, the gift card roughly covers the round-trip airfare from Ahmedabad to Leh. I realize your schedule might be too packed for a trip right on your birthday, but since your sarkaari perks handle everything once you land, all you needed were the wings. If not now, use it whenever you finally get a break, for Ladaaaaaakhh.</p>
+                </div>
+            ` : '';
             body.innerHTML = `
                 <div class="modal-day">Day ${item.day} • ${item.date}</div>
                 <h2 class="modal-title">${item.quality}</h2>
@@ -453,6 +458,8 @@
                     <h4>Fun fact</h4>
                     <p class="joke-text">"${item.joke}"</p>
                 </div>
+
+               ${proTipHTML}
             `;
 
             overlay.classList.add("active");
