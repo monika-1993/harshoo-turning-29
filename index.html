@@ -353,11 +353,11 @@
     </div>
 
     <!-- Testing Toolbar to preview all days -->
-    <!-- <div id="admin-bar">
+    <div id="admin-bar">
         <span>🛠️ <strong>Preview Mode:</strong></span>
         <button onclick="toggleOverride()">Toggle Unlock All Days</button>
         <span id="override-status" style="color: var(--text-muted);">(Currently: Normal Schedule)</span>
-    </div> -->
+    </div>
 
     <script>
         // 29 Days Dataset mapped from tracker
@@ -386,7 +386,9 @@
             // { day: 9, date: "01 Nov 2026", quality: "The GPS Rebel", vibe: "Confident in his own routes", joke: "Refuses to follow Google Maps because he is convinced he knows a shortcut." },
             // { day: 10, date: "02 Nov 2026", quality: "The Accidental Comedian", vibe: "Funny without trying", joke: "Gives a serious speech about infrastructure and accidentally drops a punchline." },
             // { day: 11, date: "03 Nov 2026", quality: "The Secret Foodie", vibe: "Loves local street food", joke: "Will travel 40 kilometers out of his way for a legendary local snack." },
-            { day: 12, date: "04 Nov 2026", quality: "The Nap Champion", vibe: "Can fall asleep anywhere", joke: "Power naps so hard he could sleep through a marching band in the living room." },
+            { day: 12, date: "04 Nov 2026", quality: "The 2014CS10222", vibe: "IIT Delhi CS God", joke: "Has cleared one of the toughest exams in the country, yet still considers 'coded the smart notice board at IIT Delhi' to be the absolute peak line on his CV.",video: "videos/convocation.mp4" },  
+            // { day: 12, date: "04 Nov 2026", quality: "The Nap Champion", vibe: "Can fall asleep anywhere", joke: "Power naps so hard he could sleep through a marching band in the living room." },
+
             { day: 13, date: "05 Nov 2026", quality: "The Over-Packer", vibe: "Prepared for any apocalypse", joke: "Packs a full survival kit for a weekend trip to a hotel with room service." },
             { day: 14, date: "06 Nov 2026", quality: "The Playlist Curator", vibe: "Eclectic music taste", joke: "Seamlessly transitions from classic retro hits to intense instrumental tracks." },
             { day: 15, date: "07 Nov 2026", quality: "The Lifelong Student", vibe: "Constantly reading & learning", joke: "Has read enough policy documents to put a horse to sleep, yet Googles animal facts at 2 AM." },
@@ -456,13 +458,25 @@ const proTipHTML = item.day === 5 ? `
                     <p style="color: #e2e8f0; font-size: 1.05rem;">I had promised to make Ladakh happen for you! Hence, the gift card roughly covers the round-trip airfare from Ahmedabad to Leh. I realize your schedule might be too packed for a trip right on your birthday, but since your sarkaari perks handle everything once you land, all you needed were the wings. If not now, use it whenever you finally get a break, for getting Leh'd :P </p>
                 </div>
             ` : '';
+
+
+            let mediaContent = '';
+    if (item.video) {
+        mediaContent = `
+            <video width="100%" height="100%" controls autoplay muted loop style="object-fit: cover;">
+                <source src="${item.video}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        `;
+    } else {
+        mediaContent = `<img src="photos/day${item.day}.jpg" alt="Photo for Day ${item.day}" class="photo">`;
+    }
             body.innerHTML = `
                 <div class="modal-day">Day ${item.day} • ${item.date}</div>
                 <h2 class="modal-title">${item.quality}</h2>
                 
                 <div class="photo-frame">
-
-                    <img src="photos/day${item.day}.jpg" alt="Photo for Day ${item.day}" class="photo">
+                    ${mediaContent}
                 </div>
 
                 <div class="section-box">
